@@ -6,15 +6,17 @@
 
 namespace yaca
 {
-  class Server
+  class YacaServer
   {
   public:
-    Server(int port);
+    YacaServer(int port);
     void start();
 
   private:
     int port;
+    boost::asio::io_context io_context;
     std::vector<std::unique_ptr<boost::asio::ip::tcp::socket>> socketVector;
+    std::vector<std::thread> threadVector;
   };
 }
 

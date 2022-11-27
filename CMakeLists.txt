@@ -13,13 +13,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 link_directories(/usr/local/lib)
 
-add_executable(server_executable src/yaca_server.cpp src/client.h src/client.cpp src/server.h
-src/server.cpp src/user.h src/user.cpp)
+add_executable(yaca_server_executable src/yaca_server_executable.cpp src/client.h src/client.cpp src/yaca_server.h
+src/yaca_server.cpp src/user.h src/user.cpp)
 
-target_link_libraries(server_executable boost_system pthread)
+target_link_libraries(yaca_server_executable boost_system pthread)
 
 
-add_executable(user_executable src/user_executable.cpp src/client.h src/client.cpp src/server.h
-src/server.cpp src/user.h src/user.cpp)
+add_executable(yaca_client_executable src/yaca_client_executable.cpp src/client.h src/client.cpp src/yaca_server.h
+src/yaca_server.cpp src/user.h src/user.cpp src/yaca_client.h src/yaca_client.cpp src/connection.h src/connection.cpp src/yaca_client.h src/yaca_client.cpp)
 
-target_link_libraries(user_executable boost_system pthread)
+target_link_libraries(yaca_client_executable boost_system pthread)

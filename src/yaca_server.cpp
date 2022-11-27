@@ -1,13 +1,27 @@
-#include <iostream>
-#include "server.h"
+#include "yaca_server.h"
 
-int main (void)
+yaca::YacaServer::YacaServer(int port): port{port}
 {
-  std::cout << "hoppa" ;
-  
-  yaca::Server server {8080};
-  
-  server.start();
-  
-  return 0;
 }
+
+void yaca::YacaServer::start()
+{
+  // boost::asio::io_context io_context;
+
+  boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), port);
+    
+  boost::asio::ip::tcp::acceptor acceptor(io_context, endpoint);
+
+  while(true)
+  {
+    std::unique_ptr<boost::asio::ip::tcp::socket> socket = std::make_unique<boost::asio::ip::tcp::socket>(io_context);
+    
+    acceptor.accept(*socket);
+
+    socketVector.push_back(std::move(socket));
+  }
+
+  
+  
+}
+
