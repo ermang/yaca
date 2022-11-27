@@ -43,9 +43,15 @@ void yaca::Connection::send(std::string content)
 void yaca::Connection::receive()
 {
   //  boost::array<char, 128> buf;
-  std::array<char, 2> charBuf;
-  boost::asio::read(*socket, boost::asio::buffer(charBuf));
   
-  std::cout << charBuf[0] << charBuf[1] << std::endl;
+  std::array<char, 2> charBuf;
+  
+  while (true)
+    {
+      boost::asio::read(*socket, boost::asio::buffer(charBuf));
+  
+      std::cout << charBuf[0] << charBuf[1] << std::endl;
+    }
+  
 }
   
