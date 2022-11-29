@@ -48,11 +48,11 @@ void yaca::YacaServer::receive(boost::asio::ip::tcp::socket& sockety)
     {
       try
 	{	  
-	  boost::asio::ip::tcp::endpoint endpointy = sockety.remote_endpoint();
+	  boost::asio::ip::tcp::endpoint endpointy = sockety.remote_endpoint();//works if sockety replaced with socketVector[0]
 	  std::cout << "YacaServer.receive() -> endpointy is " << endpointy << std::endl;
 	  
 	  std::cout << "YacaServer.receive() -> waiting to read" << std::endl;
-	  boost::asio::read(sockety, boost::asio::buffer(charBuf));
+	  boost::asio::read(sockety, boost::asio::buffer(charBuf));//works if sockety replaced with socketVector[0]
 	  std::cout << "YacaServer.receive() -> read something" << std::endl;
 	}
       catch(const boost::system::system_error& e)
