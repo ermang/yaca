@@ -12,7 +12,7 @@ int main (void)
 
   int inputInt {-1};
   
-  while(true)
+  /*  while(true)
     {
       std::cout << "press 1 to send message, 0 to quit" <<std::endl;
       std::cin >> inputInt;
@@ -26,9 +26,10 @@ int main (void)
 
 	  yacaClient.send(s);
 	}
-    }
+	}*/
   
-  //  yacaClient.send("lololo");
+  yacaClient.send("123456789012");
+  std::cin >> inputInt;
   
   return 0;
 }

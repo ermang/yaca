@@ -4,7 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <chrono>
 #include <exception>
+#include <functional>
 #include <boost/asio.hpp>
 
 namespace yaca
@@ -19,10 +21,10 @@ namespace yaca
     int port;
     std::thread t8;
     boost::asio::io_context io_context;
-    std::vector<std::unique_ptr<boost::asio::ip::tcp::socket>> socketVector;
+    std::vector<boost::asio::ip::tcp::socket> socketVector;
     std::vector<std::thread> threadVector;
 
-    void receive(std::unique_ptr<boost::asio::ip::tcp::socket>& socket);
+    void receive(boost::asio::ip::tcp::socket& socket);
   };
 }
 

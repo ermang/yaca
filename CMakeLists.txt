@@ -11,6 +11,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+SET(GCC_COVERAGE_COMPILE_FLAGS "-g")
+
 link_directories(/usr/local/lib)
 
 add_executable(yaca_server_executable src/yaca_server_executable.cpp src/client.h src/client.cpp src/yaca_server.h

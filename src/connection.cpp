@@ -9,7 +9,7 @@ void yaca::Connection::connect()
   boost::asio::io_context io_context;
 
   //boost::asio::ip::tcp::socket socket {io_context};
-  socket = std::make_unique<boost::asio::ip::tcp::socket>(io_context);
+  socket =  std::make_unique<boost::asio::ip::tcp::socket>(io_context);
   
   boost::asio::ip::address address = boost::asio::ip::make_address(ip);
   
@@ -17,7 +17,7 @@ void yaca::Connection::connect()
 
   socket->connect(endpoint);
 
-  t1= std::thread {&yaca::Connection::receive, this};
+  //  t1= std::thread {&yaca::Connection::receive, this};
 
  //  t1.join();
 
@@ -43,15 +43,25 @@ void yaca::Connection::send(std::string content)
 void yaca::Connection::receive()
 {
   //  boost::array<char, 128> buf;
-  
-  std::array<char, 2> charBuf;
-  
+
   while (true)
     {
-      boost::asio::read(*socket, boost::asio::buffer(charBuf));
+      std::cout << "inside connection.receive" << std::endl;
+      std::array<char, 2> charBuf;
+
+      
+      std::cout << "socket.is_open() => " << socket->is_open() << std::endl;
+      try
+	{
+	  boost::asio::read(*socket, boost::asio::buffer(charBuf));
+	}
+      catch(const boost::system::system_error& e)
+	{
+	  std::cout << "e is " << e.code() << " " << e.what() << std::endl;
+	  	  std::terminate();
+	}
   
       std::cout << charBuf[0] << charBuf[1] << std::endl;
     }
-  
 }
   
