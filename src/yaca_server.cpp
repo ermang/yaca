@@ -12,32 +12,46 @@ void yaca::YacaServer::start()
 
   while(true)
   {
-    std::cout << "accepting socket" << std::endl;
-    boost::asio::ip::tcp::socket socket(io_context);
-    socketVector.push_back(std::move(socket));
-    boost::asio::ip::tcp::socket& socketRef = socketVector.back();
-    acceptor.accept(socketRef);
-    std::cout << "accepted socket" << std::endl << std::flush;
+    std::cout << "thread_id=" << std::this_thread::get_id() << " accepting socket" << std::endl;
+
+    boost::asio::ip::tcp::socket socket {io_context};
     
-    std::cout << "YacaServer.start() -> socketRef.is_open() => " << socketRef.is_open() << std::endl;
-    boost::asio::ip::tcp::endpoint endpointy = socketRef.remote_endpoint();
-    std::cout << "YacaServer.start() -> endpointy is " << endpointy << std::endl;
+    acceptor.accept(socket);
+    std::cout << "thread_id=" << std::this_thread::get_id() <<  " accepted socket" << std::endl << std::flush;
+
     
-    std::thread t9 {&yaca::YacaServer::receive, this, std::ref(socketRef)};
-    threadVector.push_back(std::move(t9));
+    serverConnectionVector.emplace_back(yaca::ServerConnection {std::move(socket)});
+    serverConnectionVector.back().doIt();
+    int z =0;
+    //    std::cin >> z;
+    
+    //    serverConnectionVector.push_back(yaca::ServerConnection {socket});
+    
+    //    std::cout << "YacaServer.start() -> socketRef.is_open() => " << socketRef.is_open() << std::endl;
+    //    boost::asio::ip::tcp::endpoint endpointy = socketRef.remote_endpoint();
+    //    std::cout << "YacaServer.start() -> endpointy is " << endpointy << std::endl;
+    
+    //    std::thread t9 {&yaca::YacaServer::receive, this, std::ref(socketRef)};
+    //threadVector.push_back(std::move(t9));
 
     //threadVector.back().join(); //bu olmadan mort
     
-    std::cout <<  "YacaServer.start() -> socketRef.is_open() => " << socketRef.is_open() << std::endl;
-    std::cout << "YacaServer.start() -> start() endpointy is " << endpointy << std::endl;
+    //    std::cout <<  "YacaServer.start() -> socketRef.is_open() => " << socketRef.is_open() << std::endl;
+    //    std::cout << "YacaServer.start() -> start() endpointy is " << endpointy << std::endl;
   }  
   
 }
 
+
+/*
 void yaca::YacaServer::receive(boost::asio::ip::tcp::socket& sockety)
 {
+  int x = 0;
   
   std::cout << "YacaServer.receive() -> socket.is_open() => " << sockety.is_open() << std::endl;
+  
+  std::cin >> x;
+ 
   std::cout << "YacaServer.receive() sleeping for 5sec" << std::endl;
   std::this_thread::sleep_for(std::chrono::milliseconds(5000));  
   std::cout << "YacaServer.receive() -> socket.is_open() => " << sockety.is_open() << std::endl;
@@ -65,4 +79,5 @@ void yaca::YacaServer::receive(boost::asio::ip::tcp::socket& sockety)
     }
   
 }
+*/
 
