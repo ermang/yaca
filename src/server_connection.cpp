@@ -1,11 +1,11 @@
 #include "server_connection.h"
 
 
-yaca::ServerConnection::ServerConnection(boost::asio::ip::tcp::socket&& sockety): socket{std::move(sockety)}
+yaca::ServerConnection::ServerConnection(std::unique_ptr<boost::asio::ip::tcp::socket> sockety): socket{std::move(sockety)}
 {
 
-  std::cout << "ServerConnection() -> socket.is_open() => " << socket.is_open() << std::endl;  
-  std::cout << "ServerConnection() -> endpointy is " << socket.remote_endpoint() << std::endl;    
+  std::cout << "ServerConnection() -> socket.is_open() => " << socket->is_open() << std::endl;  
+  std::cout << "ServerConnection() -> endpointy is " << socket->remote_endpoint() << std::endl;    
   //  thread = std::thread {&yaca::ServerConnection::receive, this};
 }
 
@@ -14,16 +14,16 @@ yaca::ServerConnection::ServerConnection(ServerConnection&& other): socket{std::
 {
   std::cout << "move constructor " << std::endl;
   thread = std::move(other.thread);
-  std::cout << "ServerConnection(&&) -> socket.is_open() => " << socket.is_open() << std::endl << std::flush;   
-  std::cout << "ServerConnection(&&) -> endpointy is " << socket.remote_endpoint() << std::endl << std::flush; 
+  //  std::cout << "ServerConnection(&&) -> socket.is_open() => " << socket->is_open() << std::endl << std::flush;   
+  //  std::cout << "ServerConnection(&&) -> endpointy is " << socket->remote_endpoint() << std::endl << std::flush; 
 }
 
 
 
 yaca::ServerConnection::~ServerConnection() 
 {
-  std::cout << "thread_id=" << std::this_thread::get_id() << " ~ServerConnection()"  
-	    <<  " ServerConnection(&&) -> socket.is_open() => " << socket.is_open() << std::endl << std::flush;   
+  std::cout << "thread_id=" << std::this_thread::get_id() << " ~ServerConnection()" << std::endl;  
+  //	    <<  " ServerConnection(&&) -> socket.is_open() => " << socket->is_open() << std::endl << std::flush;   
   //	    << " ServerConnection(&&) -> endpointy is " << socket.remote_endpoint() << std::endl << std::flush; 
 }
 
@@ -45,9 +45,9 @@ void yaca::ServerConnection::receive()
       
       try
 	{	  
-	  std::cout << "thread_id=" << std::this_thread::get_id() << " ServerConnection.receive() -> socket.is_open() => " << socket.is_open() << std::endl << std::flush;	  
-	  std::cout << "ServerConnection.receive() -> endpointy is " << socket.remote_endpoint() << std::endl << std::flush;    
-	  boost::asio::read(socket, boost::asio::buffer(charBuf));
+	  std::cout << "thread_id=" << std::this_thread::get_id() << " ServerConnection.receive() -> socket.is_open() => " << socket->is_open() << std::endl << std::flush;	  
+	  std::cout << "ServerConnection.receive() -> endpointy is " << socket->remote_endpoint() << std::endl << std::flush;    
+	  boost::asio::read(*socket, boost::asio::buffer(charBuf));
 	}
       catch(const boost::system::system_error& e)
 	{
