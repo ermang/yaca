@@ -2,7 +2,6 @@
 
 yaca::YacaServer::YacaServer(int port): port{port}
 {
-  serverConnectionVector.reserve(5);
 }
 
 void yaca::YacaServer::start()
@@ -16,17 +15,14 @@ void yaca::YacaServer::start()
     std::cout << "thread_id=" << std::this_thread::get_id() << " accepting socket" << std::endl;
 
     std::unique_ptr<boost::asio::ip::tcp::socket> socket = std::make_unique<boost::asio::ip::tcp::socket>(io_context);
-      //    boost::asio::ip::tcp::socket socket {io_context};
     
     acceptor.accept(*socket);
     std::cout << "thread_id=" << std::this_thread::get_id() <<  " accepted socket" << std::endl << std::flush;
 
-    std::cout << "vec.size=" <<serverConnectionVector.size() << " vec.capacity="
-	      << serverConnectionVector.capacity() << std::endl;
-    serverConnectionVector.emplace_back(yaca::ServerConnection {std::move(socket)});
-    std::cout << "Vec.size" << serverConnectionVector.size() <<   " vec.capacity="
-	      << serverConnectionVector.capacity() << std::endl;
-    serverConnectionVector.back().doIt();
+    std::unique_ptr<yaca::ServerConnection> xyz = std::make_unique<yaca::ServerConnection>(std::move(socket));
+    serverConnectionVector.push_back(std::move(xyz));
+
+    serverConnectionVector.back()->doIt();
   }  
   
 }

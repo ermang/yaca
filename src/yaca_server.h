@@ -21,11 +21,8 @@ namespace yaca
 
   private:
     int port;
-    //std::thread t8;
     boost::asio::io_context io_context;
-    std::vector<yaca::ServerConnection> serverConnectionVector;
-    //std::vector<boost::asio::ip::tcp::socket> socketVector;
-    //std::vector<std::thread> threadVector;
+    std::vector<std::unique_ptr<yaca::ServerConnection>> serverConnectionVector;
 
     //void receive(boost::asio::ip::tcp::socket& socket);
   };
