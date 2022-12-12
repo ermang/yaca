@@ -8,11 +8,13 @@ yaca::ServerConnection::ServerConnection(std::unique_ptr<boost::asio::ip::tcp::s
   std::cout << "ServerConnection() -> endpointy is " << socket->remote_endpoint() << std::endl;    
 }
 
+/*
 yaca::ServerConnection::ServerConnection(ServerConnection&& other): socket{std::move(other.socket)}
 {
   std::cout << "move constructor " << std::endl;
-  thread = std::move(other.thread);
+  receiverThread = std::move(other.receiverThread);
 }
+*/
 
 yaca::ServerConnection::~ServerConnection() 
 {
@@ -21,12 +23,47 @@ yaca::ServerConnection::~ServerConnection()
 
 void yaca::ServerConnection::doIt() 
 {
-  thread = std::thread {&yaca::ServerConnection::receive, this};
+  receiverThread = std::thread {&yaca::ServerConnection::receive, this};
 }
 
 void yaca::ServerConnection::receive()
 {
   std::this_thread::sleep_for(std::chrono::milliseconds(5000));  
+
+  //login_begin
+  std::array<char, 10> loginRequestBuf;
+
+  
+  std::size_t read = boost::asio::read(*socket, boost::asio::buffer(loginRequestBuf));
+  std::cout << "read -> " << read << std::endl;
+  //assume successful login
+  //find friends of user from db
+  //filter online friends
+  //assume "bob" is the only online friend
+
+  std::array<char, 2> messageLenBuf;
+  std::string friendUsername {"bob"};
+
+  int length {friendUsername.size()};
+  if (length < 10)
+    {
+      messageLenBuf[0] = '0';
+      messageLenBuf[1] = std::to_string(length)[0];
+      std::cout << "messageLenBuf[1] -> " << messageLenBuf[1] << std::endl;
+    }
+  else
+    {
+    }
+    
+  
+  std::size_t wrote = boost::asio::write(*socket, boost::asio::buffer(messageLenBuf));
+  std::cout << "wrote -> " << wrote << std::endl;
+
+  
+  wrote = boost::asio::write(*socket, boost::asio::buffer(friendUsername));
+  std::cout << "wrote -> " << wrote << std::endl;
+  
+  //login_end
   
   while (true)
     {            

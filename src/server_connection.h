@@ -17,14 +17,14 @@ namespace yaca
     ServerConnection(std::unique_ptr<boost::asio::ip::tcp::socket> sockety);
     ServerConnection(const ServerConnection&) = delete;
     ServerConnection operator=(const ServerConnection&) = delete;
-    ServerConnection(ServerConnection&& other);
+    ServerConnection(ServerConnection&& other) = delete;
     ServerConnection& operator=(ServerConnection&& other) = delete;
     ~ServerConnection();
     void doIt();
     //    void send(std::string content);
     void receive();
   private:
-    std::thread thread;
+    std::thread receiverThread;
     std::unique_ptr<boost::asio::ip::tcp::socket> socket;
     
   };
